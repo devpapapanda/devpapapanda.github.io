@@ -1,0 +1,22 @@
+name: Deploy Preview for Pull Requests
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  deploy-preview:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+
+      - name: Deploy PR preview to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: .               # your static site folder (root)
+          destination_dir: pr-${{ github.event.pull_request.number }}
